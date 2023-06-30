@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/brocaar/chirpstack-network-server/v3/internal/backend/applicationserver"
 	"github.com/brocaar/lorawan"
 	"github.com/gofrs/uuid"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/backend/applicationserver"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 
 	"github.com/brocaar/chirpstack-api/go/v3/as"

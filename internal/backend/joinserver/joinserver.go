@@ -12,9 +12,9 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/brocaar/chirpstack-network-server/v3/internal/config"
 	"github.com/brocaar/lorawan"
 	"github.com/brocaar/lorawan/backend"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/config"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 

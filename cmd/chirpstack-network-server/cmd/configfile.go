@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
-	"github.com/brocaar/chirpstack-network-server/v3/internal/config"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/config"
 )
 
 // when updating this template, don't forget to update config.md!

@@ -7,8 +7,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 
-	"github.com/brocaar/chirpstack-network-server/v3/internal/gps"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/helpers/classb"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/gps"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/helpers/classb"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 

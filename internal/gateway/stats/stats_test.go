@@ -13,12 +13,12 @@ import (
 	"github.com/brocaar/chirpstack-api/go/v3/as"
 	"github.com/brocaar/chirpstack-api/go/v3/common"
 	"github.com/brocaar/chirpstack-api/go/v3/gw"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/backend/applicationserver"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/backend/gateway"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/test"
 	"github.com/brocaar/lorawan"
 	"github.com/brocaar/lorawan/band"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/backend/applicationserver"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/backend/gateway"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/test"
 )
 
 type GatewayConfigurationTestSuite struct {

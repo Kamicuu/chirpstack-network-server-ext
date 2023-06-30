@@ -14,18 +14,18 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/brocaar/chirpstack-network-server/v3/internal/backend/joinserver"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/band"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/config"
-	downdata "github.com/brocaar/chirpstack-network-server/v3/internal/downlink/data"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/logging"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/models"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/roaming"
-	updata "github.com/brocaar/chirpstack-network-server/v3/internal/uplink/data"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/uplink/join"
 	"github.com/brocaar/lorawan"
 	"github.com/brocaar/lorawan/backend"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/backend/joinserver"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/band"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/config"
+	downdata "github.com/kamicuu/chirpstack-network-server-ext/v3/internal/downlink/data"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/logging"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/models"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/roaming"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
+	updata "github.com/kamicuu/chirpstack-network-server-ext/v3/internal/uplink/data"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/uplink/join"
 )
 
 // Setup configures the roaming API.

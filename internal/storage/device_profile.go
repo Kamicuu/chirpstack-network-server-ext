@@ -6,10 +6,10 @@ import (
 	"encoding/gob"
 	"time"
 
-	"github.com/brocaar/chirpstack-network-server/v3/internal/logging"
 	"github.com/go-redis/redis/v8"
 	"github.com/gofrs/uuid"
 	"github.com/jmoiron/sqlx"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/logging"
 	"github.com/lib/pq"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"

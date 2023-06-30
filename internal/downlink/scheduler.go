@@ -9,9 +9,9 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/brocaar/chirpstack-network-server/v3/internal/downlink/data"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/downlink/multicast"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/logging"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/downlink/data"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/downlink/multicast"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/logging"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 

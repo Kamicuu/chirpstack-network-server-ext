@@ -8,15 +8,15 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/brocaar/chirpstack-network-server/v3/internal/backend/joinserver"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/band"
-	dlroaming "github.com/brocaar/chirpstack-network-server/v3/internal/downlink/roaming"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/helpers"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/logging"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/models"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/roaming"
 	"github.com/brocaar/lorawan"
 	"github.com/brocaar/lorawan/backend"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/backend/joinserver"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/band"
+	dlroaming "github.com/kamicuu/chirpstack-network-server-ext/v3/internal/downlink/roaming"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/helpers"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/logging"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/models"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/roaming"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 

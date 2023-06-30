@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/brocaar/chirpstack-network-server/v3/adr"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/band"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/test"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/adr"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/band"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/test"
 	"github.com/stretchr/testify/require"
 )
 

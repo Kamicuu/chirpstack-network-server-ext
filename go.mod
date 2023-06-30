@@ -20,6 +20,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/hashicorp/go-plugin v1.4.0
 	github.com/jmoiron/sqlx v1.2.0
+	github.com/kamicuu/chirpstack-api/go/v3 v3.0.0-20230630131557-6c41473b94ec
 	github.com/lib/pq v1.10.2
 	github.com/mitchellh/mapstructure v1.1.2
 	github.com/pkg/errors v0.9.1
@@ -36,7 +37,7 @@ require (
 	gonum.org/v1/gonum v0.0.0-20190115205657-1b07048b32c6
 	google.golang.org/api v0.30.0
 	google.golang.org/grpc v1.33.1
-	google.golang.org/protobuf v1.28.1
+	google.golang.org/protobuf v1.31.0
 	pack.ag/amqp v0.12.1
 )
 

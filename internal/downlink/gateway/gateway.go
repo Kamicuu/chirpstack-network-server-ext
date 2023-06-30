@@ -7,9 +7,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/brocaar/chirpstack-network-server/v3/internal/band"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/config"
 	loraband "github.com/brocaar/lorawan/band"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/band"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/config"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 

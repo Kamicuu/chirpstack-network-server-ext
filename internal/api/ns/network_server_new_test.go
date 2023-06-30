@@ -15,16 +15,16 @@ import (
 	"google.golang.org/grpc/codes"
 
 	"github.com/brocaar/chirpstack-api/go/v3/common"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/band"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/config"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/gateway"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/gps"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/helpers/classb"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/test"
 	"github.com/brocaar/lorawan"
 	loraband "github.com/brocaar/lorawan/band"
 	"github.com/kamicuu/chirpstack-api/go/v3/ns"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/band"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/config"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/gateway"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/gps"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/helpers/classb"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/test"
 )
 
 type NetworkServerAPITestSuite struct {

@@ -13,11 +13,11 @@ import (
 	"github.com/streadway/amqp"
 
 	"github.com/brocaar/chirpstack-api/go/v3/gw"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/backend/gateway"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/backend/gateway/marshaler"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/config"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/helpers"
 	"github.com/brocaar/lorawan"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/backend/gateway"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/backend/gateway/marshaler"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/config"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/helpers"
 )
 
 var gatewayIDRegexp = regexp.MustCompile(`([0-9a-fA-F]{16})`)

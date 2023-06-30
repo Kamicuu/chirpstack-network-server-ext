@@ -7,10 +7,10 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/brocaar/chirpstack-network-server/v3/internal/band"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/config"
 	"github.com/brocaar/lorawan"
 	loraband "github.com/brocaar/lorawan/band"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/band"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/config"
 )
 
 func init() {

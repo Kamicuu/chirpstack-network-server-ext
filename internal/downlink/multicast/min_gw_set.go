@@ -9,8 +9,8 @@ import (
 	"gonum.org/v1/gonum/graph/path"
 	"gonum.org/v1/gonum/graph/simple"
 
-	"github.com/brocaar/chirpstack-network-server/v3/internal/band"
 	"github.com/brocaar/lorawan"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/band"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 

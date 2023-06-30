@@ -13,13 +13,13 @@ import (
 	"github.com/brocaar/chirpstack-api/go/v3/common"
 	"github.com/brocaar/chirpstack-api/go/v3/gw"
 	"github.com/brocaar/chirpstack-api/go/v3/nc"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/backend/controller"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/band"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/helpers"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/models"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/test"
 	"github.com/brocaar/lorawan"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/backend/controller"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/band"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/helpers"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/models"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/test"
 )
 
 type CollectTestSuite struct {

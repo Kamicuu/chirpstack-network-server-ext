@@ -5,9 +5,9 @@ import (
 	"sort"
 	"time"
 
-	"github.com/brocaar/chirpstack-network-server/v3/adr"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/band"
 	loraband "github.com/brocaar/lorawan/band"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/adr"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/band"
 )
 
 // LRFHSSHandler implements a LR-FHSS only ADR handler.

@@ -3,9 +3,9 @@ package storage
 import (
 	"context"
 
-	"github.com/brocaar/chirpstack-network-server/v3/internal/logging"
 	"github.com/brocaar/lorawan"
 	"github.com/jmoiron/sqlx"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/logging"
 	log "github.com/sirupsen/logrus"
 )
 

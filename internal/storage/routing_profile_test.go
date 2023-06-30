@@ -8,7 +8,7 @@ import (
 	"github.com/gofrs/uuid"
 	. "github.com/smartystreets/goconvey/convey"
 
-	"github.com/brocaar/chirpstack-network-server/v3/internal/test"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/test"
 )
 
 func TestRoutingProfile(t *testing.T) {

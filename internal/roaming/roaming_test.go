@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/brocaar/chirpstack-network-server/v3/internal/config"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/test"
 	"github.com/brocaar/lorawan"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/config"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/test"
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/require"
 )
