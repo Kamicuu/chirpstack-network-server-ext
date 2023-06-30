@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/brocaar/chirpstack-api/go/v3/gw"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/storage"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 
 // HandleDownlinkXmitDataAns handles an ack as hNS.

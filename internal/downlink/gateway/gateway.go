@@ -9,8 +9,8 @@ import (
 
 	"github.com/brocaar/chirpstack-network-server/v3/internal/band"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/config"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/storage"
 	loraband "github.com/brocaar/lorawan/band"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 
 // BySignal implements sort.Interface for []gw.UplinkRXInfo based on signal strength.
@@ -40,8 +40,8 @@ func (s BySignal) Less(i, j int) bool {
 // elements the gateway (as a DeviceGatewayRXInfo) to use for downlink.
 // In the current implementation it will sort the given slice based on SNR / RSSI,
 // and return:
-//  * A random item from the elements with an SNR > minSNR
-//  * The first item of the sorted slice (failing the above)
+//   - A random item from the elements with an SNR > minSNR
+//   - The first item of the sorted slice (failing the above)
 func SelectDownlinkGateway(minSNRMargin float64, rxDR int, rxInfo []storage.DeviceGatewayRXInfo) (storage.DeviceGatewayRXInfo, error) {
 	if len(rxInfo) == 0 {
 		return storage.DeviceGatewayRXInfo{}, errors.New("device gateway rx-info slice is empty")

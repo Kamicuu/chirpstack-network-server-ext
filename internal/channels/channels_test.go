@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/brocaar/chirpstack-network-server/v3/internal/storage"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/test"
 	"github.com/brocaar/lorawan"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -33,7 +33,7 @@ func TestHandleChannelReconfigure(t *testing.T) {
 					TXPowerIndex:          1,
 					NbTrans:               2,
 					EnabledUplinkChannels: []int{0, 1}, // this is not realistic but good enough for testing
-					DR: 3,
+					DR:                    3,
 				},
 				Expected: []storage.MACCommandBlock{
 					{

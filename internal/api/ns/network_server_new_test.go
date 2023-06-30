@@ -20,11 +20,11 @@ import (
 	"github.com/brocaar/chirpstack-network-server/v3/internal/gateway"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/gps"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/helpers/classb"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/storage"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/test"
 	"github.com/brocaar/lorawan"
 	loraband "github.com/brocaar/lorawan/band"
 	"github.com/kamicuu/chirpstack-api/go/v3/ns"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 
 type NetworkServerAPITestSuite struct {

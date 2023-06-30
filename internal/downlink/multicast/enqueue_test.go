@@ -11,8 +11,8 @@ import (
 	"github.com/brocaar/lorawan"
 
 	"github.com/brocaar/chirpstack-network-server/v3/internal/config"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/storage"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/test"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 
 type EnqueueQueueItemTestCase struct {

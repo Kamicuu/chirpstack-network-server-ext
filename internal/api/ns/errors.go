@@ -8,7 +8,7 @@ import (
 	"github.com/brocaar/chirpstack-network-server/v3/internal/downlink/data"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/downlink/multicast"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/downlink/proprietary"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/storage"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 
 var errToCode = map[error]codes.Code{

@@ -36,8 +36,8 @@ import (
 	"github.com/brocaar/chirpstack-network-server/v3/internal/gateway"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/monitoring"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/roaming"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/storage"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/uplink"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 
 func run(cmd *cobra.Command, args []string) error {

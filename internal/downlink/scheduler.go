@@ -12,7 +12,7 @@ import (
 	"github.com/brocaar/chirpstack-network-server/v3/internal/downlink/data"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/downlink/multicast"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/logging"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/storage"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 
 // DeviceQueueSchedulerLoop starts an infinit loop calling the scheduler loop for Class-B

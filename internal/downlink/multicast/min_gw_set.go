@@ -10,8 +10,8 @@ import (
 	"gonum.org/v1/gonum/graph/simple"
 
 	"github.com/brocaar/chirpstack-network-server/v3/internal/band"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/storage"
 	"github.com/brocaar/lorawan"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 
 // GetMinimumGatewaySet returns the minimum set of gateways to cover all

@@ -11,15 +11,15 @@ import (
 	"github.com/brocaar/chirpstack-network-server/v3/internal/gps"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/logging"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/models"
-	"github.com/brocaar/chirpstack-network-server/v3/internal/storage"
 	"github.com/brocaar/lorawan"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 
 // handleDeviceTimeReq returns the timestamp after the RX was completed.
 // It will try in the following order:
-//   * TimeSinceGpsEpoch field
-//   * Time field
-//   * Current server time
+//   - TimeSinceGpsEpoch field
+//   - Time field
+//   - Current server time
 //
 // Note that the last case is a fallback to at least return something. With a
 // high latency between the gateway and the network-server, this timestamp
