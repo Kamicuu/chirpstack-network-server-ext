@@ -15,7 +15,6 @@ import (
 	"google.golang.org/grpc/codes"
 
 	"github.com/brocaar/chirpstack-api/go/v3/common"
-	"github.com/brocaar/chirpstack-api/go/v3/ns"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/band"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/config"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/gateway"
@@ -25,6 +24,7 @@ import (
 	"github.com/brocaar/chirpstack-network-server/v3/internal/test"
 	"github.com/brocaar/lorawan"
 	loraband "github.com/brocaar/lorawan/band"
+	"github.com/kamicuu/chirpstack-api/go/v3/ns"
 )
 
 type NetworkServerAPITestSuite struct {

@@ -1,4 +1,4 @@
-module github.com/brocaar/chirpstack-network-server/v3
+module github.com/kamicuu/chirpstack-network-server-ext/v3
 
 go 1.17
 

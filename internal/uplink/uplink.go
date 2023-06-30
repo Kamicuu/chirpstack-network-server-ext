@@ -14,7 +14,6 @@ import (
 	"github.com/brocaar/chirpstack-api/go/v3/common"
 	"github.com/brocaar/chirpstack-api/go/v3/gw"
 	"github.com/brocaar/chirpstack-api/go/v3/nc"
-	"github.com/brocaar/chirpstack-api/go/v3/ns"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/backend/controller"
 	gwbackend "github.com/brocaar/chirpstack-network-server/v3/internal/backend/gateway"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/config"
@@ -30,6 +29,7 @@ import (
 	"github.com/brocaar/chirpstack-network-server/v3/internal/uplink/proprietary"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/uplink/rejoin"
 	"github.com/brocaar/lorawan"
+	"github.com/kamicuu/chirpstack-api/go/v3/ns"
 )
 
 var (

@@ -14,7 +14,6 @@ import (
 
 	"github.com/brocaar/chirpstack-api/go/v3/common"
 	"github.com/brocaar/chirpstack-api/go/v3/gw"
-	"github.com/brocaar/chirpstack-api/go/v3/ns"
 	nsapi "github.com/brocaar/chirpstack-network-server/v3/internal/api/ns"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/backend/applicationserver"
 	"github.com/brocaar/chirpstack-network-server/v3/internal/backend/controller"
@@ -29,6 +28,7 @@ import (
 	"github.com/brocaar/lorawan"
 	"github.com/brocaar/lorawan/backend"
 	loraband "github.com/brocaar/lorawan/band"
+	"github.com/kamicuu/chirpstack-api/go/v3/ns"
 )
 
 // Assertion provides the interface for test assertions.
