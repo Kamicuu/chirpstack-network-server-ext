@@ -12,9 +12,9 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/brocaar/chirpstack-api/go/v3/common"
-	"github.com/brocaar/chirpstack-api/go/v3/gw"
 	"github.com/brocaar/lorawan"
+	"github.com/kamicuu/chirpstack-api/go/v3/common"
+	"github.com/kamicuu/chirpstack-api/go/v3/gw"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/helpers"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/logging"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/models"

@@ -14,9 +14,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 
-	"github.com/brocaar/chirpstack-api/go/v3/common"
 	"github.com/brocaar/lorawan"
 	loraband "github.com/brocaar/lorawan/band"
+	"github.com/kamicuu/chirpstack-api/go/v3/common"
 	"github.com/kamicuu/chirpstack-api/go/v3/ns"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/band"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/config"

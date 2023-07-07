@@ -3,7 +3,7 @@ package ack
 import (
 	"context"
 
-	"github.com/brocaar/chirpstack-api/go/v3/gw"
+	"github.com/kamicuu/chirpstack-api/go/v3/gw"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 

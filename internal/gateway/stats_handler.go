@@ -7,7 +7,7 @@ import (
 	"github.com/gofrs/uuid"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/brocaar/chirpstack-api/go/v3/gw"
+	"github.com/kamicuu/chirpstack-api/go/v3/gw"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/backend/gateway"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/gateway/stats"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/logging"

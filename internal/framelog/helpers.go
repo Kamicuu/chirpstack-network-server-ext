@@ -3,8 +3,8 @@ package framelog
 import (
 	"github.com/pkg/errors"
 
-	"github.com/brocaar/chirpstack-api/go/v3/common"
 	"github.com/brocaar/lorawan"
+	"github.com/kamicuu/chirpstack-api/go/v3/common"
 	"github.com/kamicuu/chirpstack-api/go/v3/ns"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/models"
 )

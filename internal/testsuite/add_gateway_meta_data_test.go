@@ -10,9 +10,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/brocaar/chirpstack-api/go/v3/common"
-	"github.com/brocaar/chirpstack-api/go/v3/gw"
 	"github.com/brocaar/lorawan"
+	"github.com/kamicuu/chirpstack-api/go/v3/common"
+	"github.com/kamicuu/chirpstack-api/go/v3/gw"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/uplink"
 )

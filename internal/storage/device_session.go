@@ -15,9 +15,9 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/brocaar/chirpstack-api/go/v3/common"
 	"github.com/brocaar/lorawan"
 	loraband "github.com/brocaar/lorawan/band"
+	"github.com/kamicuu/chirpstack-api/go/v3/common"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/band"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/logging"
 )

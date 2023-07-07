@@ -11,10 +11,10 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/brocaar/chirpstack-api/go/v3/common"
-	"github.com/brocaar/chirpstack-api/go/v3/gw"
-	"github.com/brocaar/chirpstack-api/go/v3/nc"
 	"github.com/brocaar/lorawan"
+	"github.com/kamicuu/chirpstack-api/go/v3/common"
+	"github.com/kamicuu/chirpstack-api/go/v3/gw"
+	"github.com/kamicuu/chirpstack-api/go/v3/nc"
 	"github.com/kamicuu/chirpstack-api/go/v3/ns"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/backend/controller"
 	gwbackend "github.com/kamicuu/chirpstack-network-server-ext/v3/internal/backend/gateway"

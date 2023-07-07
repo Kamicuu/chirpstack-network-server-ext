@@ -6,7 +6,7 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"
 
-	"github.com/brocaar/chirpstack-api/go/v3/nc"
+	"github.com/kamicuu/chirpstack-api/go/v3/nc"
 )
 
 // NetworkControllerClient is a network-controller client for testing.

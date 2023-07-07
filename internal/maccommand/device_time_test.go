@@ -8,8 +8,8 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/stretchr/testify/require"
 
-	"github.com/brocaar/chirpstack-api/go/v3/gw"
 	"github.com/brocaar/lorawan"
+	"github.com/kamicuu/chirpstack-api/go/v3/gw"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/gps"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/models"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"

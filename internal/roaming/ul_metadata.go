@@ -7,9 +7,9 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/pkg/errors"
 
-	"github.com/brocaar/chirpstack-api/go/v3/common"
-	"github.com/brocaar/chirpstack-api/go/v3/gw"
 	"github.com/brocaar/lorawan/backend"
+	"github.com/kamicuu/chirpstack-api/go/v3/common"
+	"github.com/kamicuu/chirpstack-api/go/v3/gw"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/band"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/helpers"
 )

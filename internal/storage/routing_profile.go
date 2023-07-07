@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/brocaar/chirpstack-api/go/v3/as"
 	"github.com/gofrs/uuid"
 	"github.com/jmoiron/sqlx"
+	"github.com/kamicuu/chirpstack-api/go/v3/as"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/backend/applicationserver"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/logging"
 	"github.com/pkg/errors"

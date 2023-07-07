@@ -18,7 +18,7 @@ import (
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/resolver"
 
-	"github.com/brocaar/chirpstack-api/go/v3/nc"
+	"github.com/kamicuu/chirpstack-api/go/v3/nc"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/adr"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/api/ns"
 	roamingapi "github.com/kamicuu/chirpstack-network-server-ext/v3/internal/api/roaming"

@@ -1,9 +1,9 @@
 package marshaler
 
 import (
-	"github.com/brocaar/chirpstack-api/go/v3/gw"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
+	"github.com/kamicuu/chirpstack-api/go/v3/gw"
 )
 
 // MarshalGatewayConfiguration marshals the GatewayConfiguration.

@@ -3,8 +3,8 @@ package controller
 import (
 	"context"
 
-	"github.com/brocaar/chirpstack-api/go/v3/nc"
 	"github.com/golang/protobuf/ptypes/empty"
+	"github.com/kamicuu/chirpstack-api/go/v3/nc"
 	"google.golang.org/grpc"
 )
 

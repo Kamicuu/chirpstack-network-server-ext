@@ -10,11 +10,11 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/stretchr/testify/require"
 
-	"github.com/brocaar/chirpstack-api/go/v3/as"
-	"github.com/brocaar/chirpstack-api/go/v3/gw"
-	"github.com/brocaar/chirpstack-api/go/v3/nc"
 	"github.com/brocaar/lorawan"
 	"github.com/brocaar/lorawan/backend"
+	"github.com/kamicuu/chirpstack-api/go/v3/as"
+	"github.com/kamicuu/chirpstack-api/go/v3/gw"
+	"github.com/kamicuu/chirpstack-api/go/v3/nc"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/storage"
 )
 

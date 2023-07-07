@@ -5,7 +5,7 @@ import (
 	context "golang.org/x/net/context"
 	"google.golang.org/grpc"
 
-	"github.com/brocaar/chirpstack-api/go/v3/as"
+	"github.com/kamicuu/chirpstack-api/go/v3/as"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/api/client/asclient"
 )
 

@@ -4,7 +4,6 @@ package storage;
 
 import "gw/gw.proto";
 
-
 message DownlinkFrame {
     // Token.
     uint32 token = 1;

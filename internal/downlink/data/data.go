@@ -13,12 +13,12 @@ import (
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/brocaar/chirpstack-api/go/v3/as"
-	"github.com/brocaar/chirpstack-api/go/v3/gw"
 	"github.com/brocaar/lorawan"
 	"github.com/brocaar/lorawan/backend"
 	loraband "github.com/brocaar/lorawan/band"
 	"github.com/brocaar/lorawan/sensitivity"
+	"github.com/kamicuu/chirpstack-api/go/v3/as"
+	"github.com/kamicuu/chirpstack-api/go/v3/gw"
 	adrr "github.com/kamicuu/chirpstack-network-server-ext/v3/adr"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/adr"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/backend/applicationserver"
@@ -115,6 +115,7 @@ var setMACCommandsSet = setMACCommands(
 
 var responseTasks = []func(*dataContext) error{
 	getDeviceProfile,
+	getDeviceExtraConfig,
 	getServiceProfile,
 	setDeviceGatewayRXInfo,
 	selectDownlinkGateway,
@@ -269,6 +270,9 @@ type dataContext struct {
 
 	// Gateway to use for downlink.
 	DownlinkGateway storage.DeviceGatewayRXInfo
+
+	// Extra configurations for device
+	DeviceExtraConfig storage.DeviceExtraConfigurations
 }
 
 type downlinkFrameItem struct {
@@ -1079,20 +1083,39 @@ func setMACCommands(funcs ...func(*dataContext) error) func(*dataContext) error 
 }
 
 func requestCustomChannelReconfiguration(ctx *dataContext) error {
-	wantedChannels := make(map[int]loraband.Channel)
+	allowedChannels := make(map[int]loraband.Channel)
 	for _, i := range band.Band().GetCustomUplinkChannelIndices() {
 		c, err := band.Band().GetUplinkChannel(i)
 		if err != nil {
 			return errors.Wrap(err, "get uplink channel error")
 		}
-		wantedChannels[i] = c
+		allowedChannels[i] = c
+	}
+
+	for _, i := range band.Band().GetStandardUplinkChannelIndices() {
+		c, err := band.Band().GetUplinkChannel(i)
+		if err != nil {
+			return errors.Wrap(err, "get uplink channel error")
+		}
+		allowedChannels[i] = c
 	}
 
 	// cleanup channels that do not exist anydmore
 	// these will be disabled by the LinkADRReq channel-mask reconfiguration
 	for k := range ctx.DeviceSession.ExtraUplinkChannels {
-		if _, ok := wantedChannels[k]; !ok {
+		if _, ok := allowedChannels[k]; !ok {
 			delete(ctx.DeviceSession.ExtraUplinkChannels, k)
+		}
+	}
+
+	var wantedChannels map[int]loraband.Channel
+	// set channels according to extraConfig
+	for k := range ctx.DeviceExtraConfig.EnabledChannels {
+		for j := range allowedChannels {
+			if k == j {
+				wantedChannels[k] = allowedChannels[j]
+				break
+			}
 		}
 	}
 
@@ -1520,6 +1543,15 @@ func getDeviceProfile(ctx *dataContext) error {
 	ctx.DeviceProfile, err = storage.GetAndCacheDeviceProfile(ctx.ctx, ctx.DB, ctx.DeviceSession.DeviceProfileID)
 	if err != nil {
 		return errors.Wrap(err, "get device-profile error")
+	}
+	return nil
+}
+
+func getDeviceExtraConfig(ctx *dataContext) error {
+	var err error
+	ctx.DeviceExtraConfig, err = storage.GetAndCacheDeviceExtraConfigurationsCache(ctx.ctx, ctx.DB, ctx.DeviceSession.DevEUI)
+	if err != nil {
+		return errors.Wrap(err, "get extra-config error")
 	}
 	return nil
 }
