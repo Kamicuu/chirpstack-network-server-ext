@@ -1112,6 +1112,7 @@ func requestCustomChannelReconfiguration(ctx *dataContext) error {
 	// set channels according to extraConfig
 	for k := range ctx.DeviceExtraConfig.EnabledChannels {
 		for j := range allowedChannels {
+			// zle jest, trzeba przerobic
 			if k == j {
 				wantedChannels[k] = allowedChannels[j]
 				break

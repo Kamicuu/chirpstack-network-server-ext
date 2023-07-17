@@ -8,14 +8,16 @@ import (
 	"github.com/brocaar/lorawan"
 	"github.com/go-redis/redis/v8"
 	"github.com/jmoiron/sqlx"
+	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/band"
 	"github.com/kamicuu/chirpstack-network-server-ext/v3/internal/logging"
+	"github.com/lib/pq"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
 
 type DeviceExtraConfigurations struct {
 	DevEUI          lorawan.EUI64 `db:"dev_eui"`
-	EnabledChannels []uint32      `db:"enabled_channels"`
+	EnabledChannels []int32       `db:"enabled_channels"`
 }
 
 const (
@@ -23,14 +25,17 @@ const (
 )
 
 // Gets channels that are available for given device - on this channels device will send data.
-func GetAvailableChannels(ctx context.Context, db sqlx.Queryer, devEUI lorawan.EUI64, channels []uint32) ([]uint32, error) {
-	var res []uint32
+func GetAvailableChannels(ctx context.Context, db sqlx.Queryer, devEUI lorawan.EUI64) ([]int32, error) {
+	var res []int32
 
-	err := sqlx.Get(db, &res,
-		`select enabled_channels from device_extra_configs
+	err := db.QueryRowx(`
+		select enabled_channels from device_extra_configs
 			where
 		dev_eui = $1`,
-		devEUI[:])
+		devEUI[:],
+	).Scan(
+		pq.Array(&res),
+	)
 
 	if err != nil {
 		return res, handlePSQLError(err, "select error")
@@ -41,14 +46,14 @@ func GetAvailableChannels(ctx context.Context, db sqlx.Queryer, devEUI lorawan.E
 
 // Sets channels that are available for given device, other channels will be disabled.
 // Update is preformed also in reddis db
-func SetAvailableChannels(ctx context.Context, db sqlx.Execer, devEUI lorawan.EUI64, channels []uint32) error {
+func SetAvailableChannels(ctx context.Context, db sqlx.Execer, devEUI lorawan.EUI64, channels []int32) error {
 	res, err := db.Exec(`
 		update device_extra_configs set 
 			enabled_channels = $2
 		where
 			dev_eui = $1`,
 		devEUI[:],
-		channels,
+		pq.Array(channels),
 	)
 
 	if err != nil {
@@ -84,7 +89,16 @@ func SetAvailableChannels(ctx context.Context, db sqlx.Execer, devEUI lorawan.EU
 func GetDeviceExtraConfigurations(ctx context.Context, db sqlx.Queryer, devEUI lorawan.EUI64) (DeviceExtraConfigurations, error) {
 	var c DeviceExtraConfigurations
 
-	err := sqlx.Get(db, &c, "select * from device_extra_configs where dev_eui = $1", devEUI[:])
+	err := db.QueryRowx(`
+		select * 
+		from device_extra_configs 
+		where dev_eui = $1`,
+		devEUI[:],
+	).Scan(
+		&c.DevEUI,
+		pq.Array(&c.EnabledChannels),
+	)
+
 	if err != nil {
 		return c, handlePSQLError(err, "select error")
 	}
@@ -92,10 +106,10 @@ func GetDeviceExtraConfigurations(ctx context.Context, db sqlx.Queryer, devEUI l
 	return c, nil
 }
 
-// CreateDeviceProfileCache caches the given device in Redis.
-// Function can also update current existing configurations.
+// Create Extra config caches the given device in Redis only.
+// Function can also update current existing configurations in redis.
 func SetDeviceExtraConfigurationsCache(ctx context.Context, extraConfig DeviceExtraConfigurations) error {
-	key := GetRedisKey(DeviceProfileKeyTempl, extraConfig.DevEUI)
+	key := GetRedisKey(ExtraConfigurationKeyTempl, extraConfig.DevEUI)
 
 	var buf bytes.Buffer
 	if err := gob.NewEncoder(&buf).Encode(extraConfig); err != nil {
@@ -110,10 +124,10 @@ func SetDeviceExtraConfigurationsCache(ctx context.Context, extraConfig DeviceEx
 	return nil
 }
 
-// CreateDeviceProfileCache caches the given device in Redis.
+// Gets extra device configs caches the given device in Redis.
 func GetDeviceExtraConfigurationsCache(ctx context.Context, devEUI lorawan.EUI64) (DeviceExtraConfigurations, error) {
 	var extraConfig DeviceExtraConfigurations
-	key := GetRedisKey(DeviceProfileKeyTempl, devEUI)
+	key := GetRedisKey(ExtraConfigurationKeyTempl, devEUI)
 
 	val, err := RedisClient().Get(ctx, key).Bytes()
 	if err != nil {
@@ -131,7 +145,7 @@ func GetDeviceExtraConfigurationsCache(ctx context.Context, devEUI lorawan.EUI64
 	return extraConfig, nil
 }
 
-// Gets CreateDeviceProfileCache for given device in Redis.
+// Gets extra device configs  for given device in Redis.
 // If device not exists in cache, function will get config from DB and save to cache
 func GetAndCacheDeviceExtraConfigurationsCache(ctx context.Context, db sqlx.Queryer, devEUI lorawan.EUI64) (DeviceExtraConfigurations, error) {
 	extraConfig, err := GetDeviceExtraConfigurationsCache(ctx, devEUI)
@@ -160,4 +174,37 @@ func GetAndCacheDeviceExtraConfigurationsCache(ctx context.Context, db sqlx.Quer
 	}
 
 	return extraConfig, nil
+}
+
+// Function creates default configuration for newly added device
+func CreateDefaultConfigForDevice(ctx context.Context, db sqlx.Execer, devEUI lorawan.EUI64) error {
+	var extraConfig DeviceExtraConfigurations
+	extraConfig.DevEUI = devEUI
+
+	//Adding channels
+	indices := append(band.Band().GetStandardUplinkChannelIndices(), band.Band().GetCustomUplinkChannelIndices()...)
+
+	channels := make([]int32, len(indices))
+	for i, val := range indices {
+		channels[i] = int32(val)
+	}
+
+	extraConfig.EnabledChannels = channels
+
+	//Saving
+	_, err := db.Exec(`
+		insert into device_extra_configs (
+			dev_eui,
+			enabled_channels
+		) values ($1, $2)`,
+		extraConfig.DevEUI, pq.Array(extraConfig.EnabledChannels),
+	)
+
+	if err != nil {
+		return handlePSQLError(err, "insert error")
+	}
+
+	SetDeviceExtraConfigurationsCache(ctx, extraConfig)
+
+	return nil
 }

@@ -7,7 +7,6 @@ require (
 	github.com/Azure/azure-amqp-common-go v1.1.4
 	github.com/Azure/azure-service-bus-go v0.9.1
 	github.com/NickBall/go-aes-key-wrap v0.0.0-20170929221519-1c3aa3e4dfc5
-	github.com/kamicuu/chirpstack-api/go/v3 v3.12.6-alfa1
 	github.com/brocaar/lorawan v0.0.0-20220715134808-3b283dda1534
 	github.com/eclipse/paho.mqtt.golang v1.4.2
 	github.com/go-redis/redis/v8 v8.8.3
@@ -20,8 +19,8 @@ require (
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/hashicorp/go-plugin v1.4.0
 	github.com/jmoiron/sqlx v1.2.0
-	github.com/kamicuu/chirpstack-api/go/v3 v3.0.0-20230630131557-6c41473b94ec
-	github.com/lib/pq v1.10.2
+	github.com/kamicuu/chirpstack-api/go/v3 v3.0.0-20230711205638-77ccbd7d9f90
+	github.com/lib/pq v1.10.9
 	github.com/mitchellh/mapstructure v1.1.2
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.14.0
@@ -39,6 +38,8 @@ require (
 	google.golang.org/grpc v1.33.1
 	pack.ag/amqp v0.12.1
 )
+
+replace github.com/kamicuu/chirpstack-api/go/v3 v3.0.0-20230711205638-77ccbd7d9f90 => ../chirpstack-api/go
 
 require (
 	cloud.google.com/go v0.65.0 // indirect

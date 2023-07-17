@@ -1801,3 +1801,50 @@ func (n *NetworkServerAPI) ClearDeviceNonces(ctx context.Context, req *ns.ClearD
 
 	return &empty.Empty{}, nil
 }
+
+func (n *NetworkServerAPI) GetDeviceChannels(ctx context.Context, req *ns.GetDeviceChannelsRequest) (*ns.GetDeviceChannelsResponse, error) {
+	var devEUI lorawan.EUI64
+	copy(devEUI[:], req.DevEui)
+
+	channels, err := storage.GetAvailableChannels(ctx, storage.DB(), devEUI)
+	if err != nil {
+		return nil, errToRPCError(err)
+	}
+
+	return &ns.GetDeviceChannelsResponse{
+		DevEui:   devEUI[:],
+		Channels: channels,
+	}, nil
+}
+
+func (n *NetworkServerAPI) SetDeviceChannels(ctx context.Context, req *ns.SetDeviceChannelsRequest) (*ns.SetDeviceChannelsResponse, error) {
+	var devEUI lorawan.EUI64
+	copy(devEUI[:], req.DevEui)
+
+	tErr := storage.Transaction(func(tx sqlx.Ext) error {
+		if err := storage.SetAvailableChannels(ctx, tx, devEUI, req.Channels); err != nil {
+			return errToRPCError(err)
+		}
+		return nil
+	})
+
+	if tErr != nil {
+		return nil, tErr
+	}
+
+	config, err := storage.GetDeviceExtraConfigurations(ctx, storage.DB(), devEUI)
+	if err != nil {
+		return nil, errToRPCError(err)
+	}
+
+	cErr := storage.SetDeviceExtraConfigurationsCache(ctx, config)
+
+	if cErr != nil {
+		return nil, tErr
+	}
+
+	return &ns.SetDeviceChannelsResponse{
+		DevEui:   devEUI[:],
+		Channels: config.EnabledChannels,
+	}, nil
+}

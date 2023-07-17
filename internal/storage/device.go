@@ -84,6 +84,13 @@ func CreateDevice(ctx context.Context, db sqlx.Execer, d *Device) error {
 		return handlePSQLError(err, "insert error")
 	}
 
+	//Sets extra configurations default options
+	extConfErr := CreateDefaultConfigForDevice(ctx, db, d.DevEUI)
+
+	if extConfErr != nil {
+		return handlePSQLError(extConfErr, "insert error")
+	}
+
 	log.WithFields(log.Fields{
 		"dev_eui": d.DevEUI,
 		"ctx_id":  ctx.Value(logging.ContextIDKey),
