@@ -273,6 +273,12 @@ type dataContext struct {
 
 	// Extra configurations for device
 	DeviceExtraConfig storage.DeviceExtraConfigurations
+
+	// Flag that indicates if channel needs to be reconfigured
+	ReconfigureChannelsByExtraConfig bool
+
+	// Chnnels to be disabled - its nessesary to handle in proper way newChannelRequest and linkAdrReq conflict at same downlink
+	ChannelsToBeDisabledByExtraConfig []int
 }
 
 type downlinkFrameItem struct {
@@ -1040,6 +1046,10 @@ func setMACCommands(funcs ...func(*dataContext) error) func(*dataContext) error 
 			}
 		}
 
+		log.WithFields(log.Fields{
+			"komendy": ctx.MACCommands,
+		}).Warningf("setMACCommands, MAC commands at start")
+
 		// In case mac-commands are disabled in the ChirpStack Network Server configuration,
 		// only allow external mac-commands (e.g. scheduled by an external
 		// controller).
@@ -1054,6 +1064,10 @@ func setMACCommands(funcs ...func(*dataContext) error) func(*dataContext) error 
 			ctx.MACCommands = externalMACCommands
 		}
 
+		log.WithFields(log.Fields{
+			"komendy": ctx.MACCommands,
+		}).Warningf("setMACCommands, MAC commands after disableMACCommands")
+
 		// Filter out mac-commands that exceed the max. error count.
 		var filteredMACCommands []storage.MACCommandBlock
 		for i := range ctx.MACCommands {
@@ -1063,6 +1077,10 @@ func setMACCommands(funcs ...func(*dataContext) error) func(*dataContext) error 
 		}
 		ctx.MACCommands = filteredMACCommands
 		ctx.MACCommands = filterIncompatibleMACCommands(ctx.MACCommands)
+
+		log.WithFields(log.Fields{
+			"komendy": ctx.MACCommands,
+		}).Warningf("setMACCommands, MAC commands after filter")
 
 		for _, block := range ctx.MACCommands {
 			// set mac-command pending
@@ -1083,42 +1101,70 @@ func setMACCommands(funcs ...func(*dataContext) error) func(*dataContext) error 
 }
 
 func requestCustomChannelReconfiguration(ctx *dataContext) error {
+
+	log.WithFields(log.Fields{
+		"Indeksy kanalow all":    band.Band().GetUplinkChannelIndices(),
+		"Indeksy kanalow custom": band.Band().GetCustomUplinkChannelIndices(),
+	}).Warningf("rekonfiguracja kanalow")
+
+	// Gets all channels in system
 	allowedChannels := make(map[int]loraband.Channel)
-	for _, i := range band.Band().GetCustomUplinkChannelIndices() {
+	for _, i := range band.Band().GetUplinkChannelIndices() {
 		c, err := band.Band().GetUplinkChannel(i)
 		if err != nil {
-			return errors.Wrap(err, "get uplink channel error")
+			return errors.Wrap(err, fmt.Sprintf("get uplink channel error, channel index: %d ", i))
 		}
 		allowedChannels[i] = c
 	}
 
-	for _, i := range band.Band().GetStandardUplinkChannelIndices() {
-		c, err := band.Band().GetUplinkChannel(i)
-		if err != nil {
-			return errors.Wrap(err, "get uplink channel error")
+	// Set channels according to extraConfig
+	wantedChannels := make(map[int]loraband.Channel)
+	for _, k := range ctx.DeviceExtraConfig.EnabledChannels {
+		for j := range allowedChannels {
+			if k == int32(j) {
+				wantedChannels[j] = allowedChannels[j]
+				break
+			}
 		}
-		allowedChannels[i] = c
+	}
+
+	// Check if there is any differences between current EnabledUplinkChannels and
+	// new channels - if channels are different then edit context and force update ADR
+	var channels []int
+	for _, i := range ctx.DeviceSession.EnabledUplinkChannels {
+		if _, ok := wantedChannels[i]; ok {
+			channels = append(channels, i)
+		} else {
+			if ctx.ChannelsToBeDisabledByExtraConfig == nil {
+				ctx.ChannelsToBeDisabledByExtraConfig = []int{i}
+			} else {
+				ctx.ChannelsToBeDisabledByExtraConfig = append(ctx.ChannelsToBeDisabledByExtraConfig, i)
+			}
+		}
+	}
+
+	if len(ctx.DeviceSession.EnabledUplinkChannels) != len(channels) {
+		ctx.DeviceSession.EnabledUplinkChannels = channels
+		ctx.ReconfigureChannelsByExtraConfig = true
 	}
 
 	// cleanup channels that do not exist anydmore
 	// these will be disabled by the LinkADRReq channel-mask reconfiguration
 	for k := range ctx.DeviceSession.ExtraUplinkChannels {
-		if _, ok := allowedChannels[k]; !ok {
+		if _, ok := wantedChannels[k]; !ok {
 			delete(ctx.DeviceSession.ExtraUplinkChannels, k)
 		}
 	}
 
-	var wantedChannels map[int]loraband.Channel
-	// set channels according to extraConfig
-	for k := range ctx.DeviceExtraConfig.EnabledChannels {
-		for j := range allowedChannels {
-			// zle jest, trzeba przerobic
-			if k == j {
-				wantedChannels[k] = allowedChannels[j]
-				break
-			}
-		}
-	}
+	log.WithFields(log.Fields{
+		"dev_eui":                       ctx.DeviceSession.DevEUI,
+		"WantedChannels":                wantedChannels,
+		"Needs reconfiguration":         ctx.ReconfigureChannelsByExtraConfig,
+		"EnabledUplinkChannels w sesji": ctx.DeviceSession.EnabledUplinkChannels,
+		"ExtraUplinkChannels w sesji":   ctx.DeviceSession.ExtraUplinkChannels,
+		"Konfig wszystkie kanaly":       band.Band().GetUplinkChannelIndices(),
+		"Konfig extra kanaly":           band.Band().GetCustomUplinkChannelIndices(),
+	}).Warningf("rekonfiguracja kanalow")
 
 	block := maccommand.RequestNewChannels(ctx.DeviceSession.DevEUI, 3, ctx.DeviceSession.ExtraUplinkChannels, wantedChannels)
 	if block != nil {
@@ -1211,7 +1257,7 @@ func requestADRChange(ctx *dataContext) error {
 
 	// The response values are different than the request values, thus we must
 	// send a LinkADRReq to the device.
-	if handleResp.DR != handleReq.DR || handleResp.TxPowerIndex != handleReq.TxPowerIndex || handleResp.NbTrans != handleReq.NbTrans {
+	if handleResp.DR != handleReq.DR || handleResp.TxPowerIndex != handleReq.TxPowerIndex || handleResp.NbTrans != handleReq.NbTrans || ctx.ReconfigureChannelsByExtraConfig {
 		var linkADRReq *storage.MACCommandBlock
 		for i := range ctx.MACCommands {
 			if ctx.MACCommands[i].CID == lorawan.LinkADRReq {
@@ -1234,6 +1280,39 @@ func requestADRChange(ctx *dataContext) error {
 			lastMACPl.TXPower = uint8(handleResp.TxPowerIndex)
 			lastMACPl.Redundancy.NbRep = uint8(handleResp.NbTrans)
 		} else {
+
+			// If there is command NewChannelReq - channel mask will be removed,
+			// so we must set this once again after NewChannelReq complete
+			// we can do it to keep channels that should be removed in session
+			log.WithFields(log.Fields{
+				"dev_eui":              ctx.DeviceSession.DevEUI,
+				"EnabledUplinkChannel": ctx.DeviceSession.EnabledUplinkChannels,
+				"ChannelsTOBeDisabled": ctx.ChannelsToBeDisabledByExtraConfig,
+			}).Warningf("BEF NEW CHANNEL REQUEST!")
+
+			for _, mac := range ctx.MACCommands {
+				if lorawan.NewChannelReq == mac.CID {
+					for _, chKeep := range ctx.ChannelsToBeDisabledByExtraConfig {
+						addChannel := true
+						for _, chCurrent := range ctx.DeviceSession.EnabledUplinkChannels {
+							if chKeep == chCurrent {
+								addChannel = false
+								break
+							}
+						}
+						if addChannel {
+							ctx.DeviceSession.EnabledUplinkChannels = append(ctx.DeviceSession.EnabledUplinkChannels, int(chKeep))
+
+							log.WithFields(log.Fields{
+								"dev_eui":              ctx.DeviceSession.DevEUI,
+								"EnabledUplinkChannel": ctx.DeviceSession.EnabledUplinkChannels,
+							}).Warningf("ROBIMY APPEND")
+
+						}
+					}
+				}
+			}
+
 			var chMask lorawan.ChMask
 			chMaskCntl := -1
 			for _, c := range ctx.DeviceSession.EnabledUplinkChannels {
@@ -1248,7 +1327,6 @@ func requestADRChange(ctx *dataContext) error {
 				}
 				chMask[c%16] = true
 			}
-
 			ctx.MACCommands = append(ctx.MACCommands, storage.MACCommandBlock{
 				CID: lorawan.LinkADRReq,
 				MACCommands: []lorawan.MACCommand{

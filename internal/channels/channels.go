@@ -11,6 +11,25 @@ import (
 // (e.g. for the US band) or when a reconfiguration of active channels
 // happens.
 func HandleChannelReconfigure(ds storage.DeviceSession) ([]storage.MACCommandBlock, error) {
+
+	// quite ugly workaround for ability to disable default channels
+	// if any of default channels is not present in EnabledUplinkChannels, then
+	// GetLinkADRReqPayloadsForEnabledUplinkChannelIndices creates ADR paylode that does
+	// not allow to disable default channels, so we do not get paylode from this method
+	// if any default channel is not present
+	var defChan int
+	for _, i := range ds.EnabledUplinkChannels {
+		if i == 0 || i == 1 || i == 2 {
+			defChan++
+		}
+	}
+
+	if defChan != 3 {
+		return nil, nil
+	}
+
+	//end workaround
+
 	payloads := band.Band().GetLinkADRReqPayloadsForEnabledUplinkChannelIndices(ds.EnabledUplinkChannels)
 	if len(payloads) == 0 {
 		return nil, nil
