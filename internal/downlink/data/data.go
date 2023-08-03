@@ -1117,7 +1117,15 @@ func requestCustomChannelReconfiguration(ctx *dataContext) error {
 		allowedChannels[i] = c
 	}
 
+	// Current channels - nessesary for add new channels.
+	currentChannels := make(map[int]loraband.Channel)
+	for _, i := range ctx.DeviceSession.EnabledUplinkChannels {
+		c, _ := band.Band().GetUplinkChannel(i)
+		currentChannels[i] = c
+	}
+
 	// Set channels according to extraConfig
+	// channles are picked only from global-config allowed channels
 	wantedChannels := make(map[int]loraband.Channel)
 	for _, k := range ctx.DeviceExtraConfig.EnabledChannels {
 		for j := range allowedChannels {
@@ -1128,8 +1136,11 @@ func requestCustomChannelReconfiguration(ctx *dataContext) error {
 		}
 	}
 
-	// Check if there is any differences between current EnabledUplinkChannels and
-	// new channels - if channels are different then edit context and force update ADR
+	// Check if there is any differences between current EnabledUplinkChannels
+	// and wanted channels from ExtraConfig - if channels are different, then we edit context and force update channels.
+	// When channel is in EnabledUplinkChannels, but not in wantedChannels we need to disable this channel - it works ONLY when we disabling channels,
+	// but when we also enable some channel at same time, there is a conflict (Cannot send mask and NewChannelReq in one frame), so we handle it by variable ChannelsToBeDisabledByExtraConfig
+	// this variable allows to sen channel mask after NewChannelReq.
 	var channels []int
 	for _, i := range ctx.DeviceSession.EnabledUplinkChannels {
 		if _, ok := wantedChannels[i]; ok {
@@ -1159,6 +1170,7 @@ func requestCustomChannelReconfiguration(ctx *dataContext) error {
 	log.WithFields(log.Fields{
 		"dev_eui":                       ctx.DeviceSession.DevEUI,
 		"WantedChannels":                wantedChannels,
+		"currentChannels":               currentChannels,
 		"Needs reconfiguration":         ctx.ReconfigureChannelsByExtraConfig,
 		"EnabledUplinkChannels w sesji": ctx.DeviceSession.EnabledUplinkChannels,
 		"ExtraUplinkChannels w sesji":   ctx.DeviceSession.ExtraUplinkChannels,
@@ -1166,7 +1178,7 @@ func requestCustomChannelReconfiguration(ctx *dataContext) error {
 		"Konfig extra kanaly":           band.Band().GetCustomUplinkChannelIndices(),
 	}).Warningf("rekonfiguracja kanalow")
 
-	block := maccommand.RequestNewChannels(ctx.DeviceSession.DevEUI, 3, ctx.DeviceSession.ExtraUplinkChannels, wantedChannels)
+	block := maccommand.RequestNewChannels(ctx.DeviceSession.DevEUI, 3, currentChannels, wantedChannels)
 	if block != nil {
 		ctx.MACCommands = append(ctx.MACCommands, *block)
 	}
