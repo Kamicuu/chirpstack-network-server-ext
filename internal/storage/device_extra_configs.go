@@ -62,27 +62,33 @@ func SetAvailableChannels(ctx context.Context, db sqlx.Execer, devEUI lorawan.EU
 
 	ra, err := res.RowsAffected()
 	if err != nil {
-		val, err := GetDeviceExtraConfigurationsCache(ctx, devEUI)
-
-		if err != nil {
-			return handlePSQLError(err, "update error, cache not updated")
-		}
-
-		val.EnabledChannels = channels
-		SetDeviceExtraConfigurationsCache(ctx, val)
-
 		return handlePSQLError(err, "get rows affected error")
 	}
-	if ra == 0 {
+
+	if ra != 0 {
+		val, err := GetDeviceExtraConfigurationsCache(ctx, devEUI)
+
+		//No config in cache, create default, change channels and save to cache
+		if err != nil {
+			extraConf := createDefaultConfig(devEUI)
+			extraConf.EnabledChannels = channels
+
+			SetDeviceExtraConfigurationsCache(ctx, val)
+		} else {
+			val.EnabledChannels = channels
+			SetDeviceExtraConfigurationsCache(ctx, val)
+		}
+
+		log.WithFields(log.Fields{
+			"dev_eui":   devEUI,
+			"channels:": channels[:],
+			"ctx_id":    ctx.Value(logging.ContextIDKey),
+		}).Info("device extra config updated - channels set")
+
+		return nil
+	} else {
 		return ErrDoesNotExist
 	}
-
-	log.WithFields(log.Fields{
-		"dev_eui":   devEUI,
-		"channels:": channels[:],
-		"ctx_id":    ctx.Value(logging.ContextIDKey),
-	}).Info("device extra config updated - channels set")
-	return nil
 }
 
 // Gets Extra config options for devie from Postgress DB
@@ -153,10 +159,7 @@ func GetAndCacheDeviceExtraConfigurationsCache(ctx context.Context, db sqlx.Quer
 		return extraConfig, nil
 	}
 
-	if err != ErrDoesNotExist {
-		log.WithFields(log.Fields{
-			"devEUI": devEUI,
-		}).WithError(err).Error("get extra config cache error")
+	if err == ErrDoesNotExist {
 		// we don't return as we can still fall-back onto db retrieval
 
 		extraConfig, err = GetDeviceExtraConfigurations(ctx, db, devEUI)
@@ -177,19 +180,8 @@ func GetAndCacheDeviceExtraConfigurationsCache(ctx context.Context, db sqlx.Quer
 }
 
 // Function creates default configuration for newly added device
-func CreateDefaultConfigForDevice(ctx context.Context, db sqlx.Execer, devEUI lorawan.EUI64) error {
-	var extraConfig DeviceExtraConfigurations
-	extraConfig.DevEUI = devEUI
-
-	//Adding channels
-	indices := append(band.Band().GetStandardUplinkChannelIndices(), band.Band().GetCustomUplinkChannelIndices()...)
-
-	channels := make([]int32, len(indices))
-	for i, val := range indices {
-		channels[i] = int32(val)
-	}
-
-	extraConfig.EnabledChannels = channels
+func CreateDefaultConfigForDeviceAndSaveToDbAndCache(ctx context.Context, db sqlx.Execer, devEUI lorawan.EUI64) error {
+	extraConfig := createDefaultConfig(devEUI)
 
 	//Saving
 	_, err := db.Exec(`
@@ -207,4 +199,21 @@ func CreateDefaultConfigForDevice(ctx context.Context, db sqlx.Execer, devEUI lo
 	SetDeviceExtraConfigurationsCache(ctx, extraConfig)
 
 	return nil
+}
+
+func createDefaultConfig(devEUI lorawan.EUI64) DeviceExtraConfigurations {
+	var extraConfig DeviceExtraConfigurations
+	extraConfig.DevEUI = devEUI
+
+	//Adding channels
+	indices := append(band.Band().GetStandardUplinkChannelIndices(), band.Band().GetCustomUplinkChannelIndices()...)
+
+	channels := make([]int32, len(indices))
+	for i, val := range indices {
+		channels[i] = int32(val)
+	}
+
+	extraConfig.EnabledChannels = channels
+
+	return extraConfig
 }

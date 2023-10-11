@@ -85,7 +85,7 @@ func CreateDevice(ctx context.Context, db sqlx.Execer, d *Device) error {
 	}
 
 	//Sets extra configurations default options
-	extConfErr := CreateDefaultConfigForDevice(ctx, db, d.DevEUI)
+	extConfErr := CreateDefaultConfigForDeviceAndSaveToDbAndCache(ctx, db, d.DevEUI)
 
 	if extConfErr != nil {
 		return handlePSQLError(extConfErr, "insert error")
